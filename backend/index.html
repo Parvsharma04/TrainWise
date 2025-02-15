@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Video Stream</title>
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+</head>
+<body>
+    <h3>Input video stream</h3>
+    <video width="500" height="400" autoplay muted></video>
+
+    <h3>Response video stream</h3>
+    <canvas id="receivedVideo" width="500" height="400"></canvas>  </body>
+
+    <script>
+        const socket = io();
+        const video = document.querySelector("video");
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d");
+        const receivedCanvas = document.getElementById('receivedVideo');
+        const receivedCtx = receivedCanvas.getContext('2d');
+
+        const videoConstraints = {
+            audio: false,
+            video: {
+                facingMode: "user",
+            },
+        };
+
+        navigator.mediaDevices.getUserMedia(videoConstraints)
+            .then((stream) => {
+                video.srcObject = stream;
+                video.addEventListener("loadedmetadata", () => {
+                    canvas.width = video.videoWidth;
+                    canvas.height = video.videoHeight;
+                });
+
+                video.addEventListener("play", () => {
+                    setInterval(() => {
+                        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+                        const dataURL = canvas.toDataURL("image/jpeg");
+                        socket.emit("videoFrame", dataURL);
+                    }, 30); // Adjust frame rate as needed
+                });
+            })
+            .catch((err) => console.error("Error accessing camera:", err));
+
+
+        socket.on('responseVideo', (frame) => {
+            const img = new Image();
+            img.onload = () => {
+                receivedCtx.drawImage(img, 0, 0, receivedCanvas.width, receivedCanvas.height);
+            };
+            img.src = frame;
+        });
+
+        socket.on('connect', () => {
+            console.log('Connected to server');
+        });
+
+    </script>
+</body>
+</html>
