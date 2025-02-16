@@ -19,7 +19,7 @@ io.on("connection", (socket) => {
 
     socket.on("startTracking", () => {
         if (!pythonProcess) {
-            pythonProcess = spawn('python', ['../model/jumping.py']); // Path to your Python script
+            pythonProcess = spawn('python', ['../model/squats.py']); // Path to your Python script
 
             pythonProcess.stdout.on('data', (data) => {
                 try {
