@@ -1,17 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Video Stream</title>
     <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+    <style>
+        #receivedVideo {
+            border: 1px solid black; /* Add a border to the canvas */
+        }
+    </style>
 </head>
+
 <body>
     <h3>Input video stream</h3>
     <video width="500" height="400" autoplay muted></video>
 
     <h3>Response video stream</h3>
-    <canvas id="receivedVideo" width="500" height="400"></canvas>  </body>
+    <canvas id="receivedVideo" width="500" height="400"></canvas>
+    <button id="startTracking">Start Tracking</button>
+    <button id="stopTracking">Stop Tracking</button>
+    <div id="trackingStatus"></div>
 
     <script>
         const socket = io();
@@ -20,6 +30,9 @@
         const ctx = canvas.getContext("2d");
         const receivedCanvas = document.getElementById('receivedVideo');
         const receivedCtx = receivedCanvas.getContext('2d');
+        const startButton = document.getElementById('startTracking');
+        const stopButton = document.getElementById('stopTracking');
+        const trackingStatus = document.getElementById('trackingStatus');
 
         const videoConstraints = {
             audio: false,
@@ -34,6 +47,8 @@
                 video.addEventListener("loadedmetadata", () => {
                     canvas.width = video.videoWidth;
                     canvas.height = video.videoHeight;
+                    receivedCanvas.width = video.videoWidth;  // Match received canvas size
+                    receivedCanvas.height = video.videoHeight;
                 });
 
                 video.addEventListener("play", () => {
@@ -41,24 +56,61 @@
                         ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
                         const dataURL = canvas.toDataURL("image/jpeg");
                         socket.emit("videoFrame", dataURL);
-                    }, 30); // Adjust frame rate as needed
+                    }, 100);
                 });
             })
             .catch((err) => console.error("Error accessing camera:", err));
 
 
-        socket.on('responseVideo', (frame) => {
-            const img = new Image();
-            img.onload = () => {
-                receivedCtx.drawImage(img, 0, 0, receivedCanvas.width, receivedCanvas.height);
-            };
-            img.src = frame;
+
+        socket.on('trackingData', (data) => {
+            console.log("Tracking Data Received:", data);
+            trackingStatus.textContent = `Jumping Jacks: ${data.count}`;
+            if (data.frame) {
+                const img = new Image();
+                img.onload = () => {
+                    receivedCtx.drawImage(img, 0, 0, receivedCanvas.width, receivedCanvas.height);
+                };
+                img.src = "data:image/jpeg;base64," + data.frame;
+            } else if (data.error) {
+                console.error("Python Error:", data.error);
+                trackingStatus.textContent = "Python Error: " + data.error; // Display the error
+            }
+        });
+
+        socket.on('trackingEnded', () => {
+            trackingStatus.textContent = "Tracking Ended.";
+            startButton.disabled = false;
+            stopButton.disabled = true;
+        });
+
+        socket.on('trackingError', (message) => {
+            console.error("Tracking Error:", message);
+            trackingStatus.textContent = `Tracking Error: ${message}`;
+            startButton.disabled = false;
+            stopButton.disabled = true;
+        });
+
+
+        startButton.addEventListener('click', () => {
+            socket.emit('startTracking');
+            trackingStatus.textContent = "Tracking Started...";
+            startButton.disabled = true;
+            stopButton.disabled = false;
+        });
+
+        stopButton.addEventListener('click', () => {
+            socket.emit('stopTracking');
+            trackingStatus.textContent = "Stopping Tracking...";
+            startButton.disabled = false;
+            stopButton.disabled = true;
         });
 
         socket.on('connect', () => {
             console.log('Connected to server');
+            stopButton.disabled = true; // Disable stop initially
         });
-
     </script>
 </body>
+
 </html>
