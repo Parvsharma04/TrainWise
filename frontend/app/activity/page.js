@@ -31,8 +31,7 @@ export default function Activity() {
     });
 
     newSocket.on("trackingData", (data)=>{
-      console.log(data);
-      
+      setReps(data.pushup_count)
     })
 
     return () => {
@@ -54,6 +53,11 @@ export default function Activity() {
         console.error("Error accessing camera:", err);
       }
     };
+
+    let timeInterval = setInterval(()=>{
+      setTimeInSec(prev=>prev+1);
+    }, 1000)
+
 
     getVideo();
   }, []);
@@ -90,18 +94,18 @@ export default function Activity() {
   }
 
   return (
-    <div className="font-['general']">
+    <div className="font-['general'] z-50">
       <video
         ref={videoRef}
         autoPlay
         muted
         playsInline
-        style={{ width: "60%", height: "auto" }}
+        style={{ width: window.innerWidth, height: window.innerHeight}}
         className=""
       ></video>
 
       {!activityStarted && (
-        <div className="fixed inset-0 flex items-center justify-center z-50">
+        <div className="fixed inset-0 flex items-center justify-center">
           <button
             className="bg-[#0056F1] text-white px-3 py-2"
             onClick={startActivity}
@@ -110,6 +114,24 @@ export default function Activity() {
           </button>
         </div>
       )}
+
+      {activityStarted && (
+        <div className="fixed inset-0 font-['general'] p-2">
+        
+        <div>
+        <span className="text-2xl">Current reps: {reps}</span>
+        </div>
+
+        <div className="fixed bottom-0 right-0">
+        <span>Current workout: Pushups</span>
+          </div>
+
+          <div className="fixed top-0 right-0 text-5xl">
+        <span>{Math.round(timeInSec/60<=9)?"0"+Math.round(timeInSec/60):Math.round(timeInSec/60)}:{Math.round(timeInSec%60)<=9?"0"+timeInSec%60:timeInSec%60}</span>
+          </div>
+        </div>
+      )
+      }
 
       <canvas ref={canvasRef} style={{ display: "none" }}></canvas>
     </div>
