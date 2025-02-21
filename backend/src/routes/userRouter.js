@@ -76,8 +76,6 @@ router.post("/signup", async (req, res) => {
   }
 });
 
-module.exports = router;
-
 router.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
