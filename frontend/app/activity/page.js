@@ -6,6 +6,8 @@ import io from "socket.io-client";
 
 export default function Activity() {
   const videoRef = useRef(null);
+  const canvasRef = useRef(null);
+
   const [windowDimensions, setWindowDimensions] = useState({
     width: 0,
     height: 0,
@@ -13,8 +15,8 @@ export default function Activity() {
 
   const [socket, setSocket] = useState(null);
 
-  // const canvas = document.createElement("canvas");
-  // const ctx = canvas.getContext("2d");
+  const canvas = document.createElement("canvas");
+  const ctx = canvas.getContext("2d");
 
   const [activityStarted, setActivityStarted] = useState(false);
   const [reps, setReps] = useState(0);
@@ -63,9 +65,16 @@ export default function Activity() {
         });
         if (videoRef.current) {
           videoRef.current.srcObject = stream;
-          if (socket) {
-            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-            const dataURL = canvas.toDataURL("image/jpeg");
+
+          if (canvasRef.current) {
+            canvasRef.current.width = videoRef.current.videoWidth;
+            canvasRef.current.height = videoRef.current.videoHeight;
+          }
+
+          if (videoRef.current && canvasRef.current) {
+            const ctx = canvasRef.current.getContext("2d");
+            ctx.drawImage(videoRef.current, 0, 0, canvasRef.current.width, canvasRef.current.height);
+            const dataURL = canvasRef.current.toDataURL("image/jpeg", 0.8);
             socket.emit("videoFrame", dataURL);
           }
         }
@@ -138,6 +147,15 @@ export default function Activity() {
           </div>
         </div>
       )}
+
+
+<canvas
+        ref={canvasRef}
+        style={{
+          width: windowDimensions.width,
+          height: windowDimensions.height,
+        }}
+      ></canvas>
     </div>
   );
 }

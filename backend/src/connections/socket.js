@@ -15,7 +15,7 @@ function initializeSocket(server) {
       console.log("Tracking started...");
       
       if (!pythonProcess) {
-        pythonProcess = spawn("python", ["../../model/jumping.py"]);
+        pythonProcess = spawn("python", ["../../model/squats.py"]);
 
         pythonProcess.stdout.on("data", (data) => {
           try {
