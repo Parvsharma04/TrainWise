@@ -1,13 +1,17 @@
-import clsx from "clsx";
+"use client"; // Mark this component as a Client Component
 
-const Button = ({ id, title, rightIcon, leftIcon, containerClass }) => {
-  return (
+import clsx from "clsx";
+import Link from "next/link";
+
+const Button = ({ id, title, rightIcon, leftIcon, containerClass, href, onClick }) => {
+  const ButtonContent = () => (
     <button
       id={id}
       className={clsx(
         "group relative z-10 w-fit cursor-pointer overflow-hidden rounded-full bg-violet-50 px-7 py-3 text-black",
         containerClass
       )}
+      onClick={onClick}
     >
       {leftIcon}
 
@@ -23,6 +27,16 @@ const Button = ({ id, title, rightIcon, leftIcon, containerClass }) => {
       {rightIcon}
     </button>
   );
+
+  if (href) {
+    return (
+      <Link href={href}>
+        <ButtonContent />
+      </Link>
+    );
+  }
+
+  return <ButtonContent />;
 };
 
 export default Button;
