@@ -2,11 +2,7 @@
 
 import { useRef, useEffect, useState, useLayoutEffect } from "react";
 import { Icon } from "@iconify/react";
-<<<<<<< Updated upstream
 import io from "socket.io-client";
-=======
-import { socket } from "../socket";
->>>>>>> Stashed changes
 
 export default function Activity() {
   const videoRef = useRef(null);
@@ -15,14 +11,10 @@ export default function Activity() {
     height: 0,
   });
 
-<<<<<<< Updated upstream
   const [socket, setSocket] = useState(null);
 
-  const canvas = document.createElement("canvas");
-  const ctx = canvas.getContext("2d");
-=======
-  const [socketConnected, setSocketConnection] = useState(false);
->>>>>>> Stashed changes
+  // const canvas = document.createElement("canvas");
+  // const ctx = canvas.getContext("2d");
 
   const [activityStarted, setActivityStarted] = useState(false);
   const [reps, setReps] = useState(0);
@@ -30,7 +22,6 @@ export default function Activity() {
 
   function startActivity() {
     console.log("Activity started!");
-<<<<<<< Updated upstream
     if (socket) {
       socket.emit("startTracking");
     }
@@ -53,11 +44,6 @@ export default function Activity() {
     }
   }, [socket]);
 
-=======
-    setActivityStarted(true);
-  }
-
->>>>>>> Stashed changes
   useLayoutEffect(() => {
     console.log(window.innerWidth);
 
@@ -77,39 +63,25 @@ export default function Activity() {
         });
         if (videoRef.current) {
           videoRef.current.srcObject = stream;
-<<<<<<< Updated upstream
           if (socket) {
             ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
             const dataURL = canvas.toDataURL("image/jpeg");
             socket.emit("videoFrame", dataURL);
           }
-=======
->>>>>>> Stashed changes
         }
       } catch (err) {
         console.log("Error in getting video input!");
       }
     };
 
-<<<<<<< Updated upstream
     let timerInterval = setInterval(() => {
       setTimeInSec((prev) => setTimeInSec(prev + 1));
-=======
-    let timerInterval = setInterval(()=>{
-        console.log("yiem", timeInSec);
-        
-        setTimeInSec((prev)=>setTimeInSec(prev+1));
->>>>>>> Stashed changes
     }, 1000);
 
     getVideo();
 
     return () => {
-<<<<<<< Updated upstream
       clearInterval(timerInterval);
-=======
-        clearInterval(timerInterval);
->>>>>>> Stashed changes
       if (videoRef.current && videoRef.current.srcObject) {
         const stream = videoRef.current.srcObject;
         const tracks = stream.getTracks();
@@ -118,24 +90,16 @@ export default function Activity() {
         videoRef.current.srcObject = null; // Clear the source
       }
     };
-<<<<<<< Updated upstream
-=======
-
->>>>>>> Stashed changes
   }, []);
 
   return (
     <div className="font-['general']">
       <video
         ref={videoRef}
-<<<<<<< Updated upstream
         style={{
           width: windowDimensions.width,
           height: windowDimensions.height,
         }}
-=======
-        style={{width: windowDimensions.width, height:windowDimensions.height}}
->>>>>>> Stashed changes
         autoPlay
         muted
       ></video>
@@ -162,7 +126,6 @@ export default function Activity() {
           </div>
 
           <div className="fixed top-0 right-0 p-2 text-5xl">
-<<<<<<< Updated upstream
             <time>
               {Math.round(timeInSec / 60 <= 9)
                 ? "0" + Math.round(timeInSec / 60)
@@ -172,9 +135,6 @@ export default function Activity() {
           </div>
           <div className="fixed bottom-0 left-0">
             {/* Socket connection: {socketConnected?"Connected":"Not connected"} */}
-=======
-                <time>{Math.round(timeInSec/60<=9)?"0"+Math.round(timeInSec/60):Math.round(timeInSec/60)}:{timeInSec%60<=9?"0"+timeInSec%60:timeInSec%60}</time>
->>>>>>> Stashed changes
           </div>
         </div>
       )}
