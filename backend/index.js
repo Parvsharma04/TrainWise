@@ -19,33 +19,33 @@ io.on("connection", (socket) => {
 
     socket.on("startTracking", () => {
         if (!pythonProcess) {
-            pythonProcess = spawn('python', ['../model/squats.py']); // Path to your Python script
+            pythonProcess = spawn('python', ['../model/squats.py']);
 
             pythonProcess.stdout.on('data', (data) => {
                 try {
                     const receivedData = JSON.parse(data.toString());
-                    io.emit("trackingData", receivedData); // Send to all clients
+                    io.emit("trackingData", receivedData);
                 } catch (error) {
                     console.error('Error parsing JSON:', error);
-                    console.log('Raw data from Python:', data.toString()); // For debugging
+                    console.log('Raw data from Python:', data.toString());
                 }
             });
 
             pythonProcess.stderr.on('data', (data) => {
                 console.error(`Python script error: ${data}`);
-                socket.emit("trackingError", data.toString()); // Send error to the specific client
+                socket.emit("trackingError", data.toString());
             });
 
             pythonProcess.on('close', (code) => {
                 console.log(`Python script exited with code ${code}`);
                 pythonProcess = null;
-                io.emit("trackingEnded"); // Notify all clients
+                io.emit("trackingEnded");
             });
 
             pythonProcess.on('error', (err) => {
                 console.error('Failed to spawn Python process:', err);
                 pythonProcess = null;
-                socket.emit("trackingError", "Failed to start tracking."); // Notify the client
+                socket.emit("trackingError", "Failed to start tracking.");
             });
 
         } else {
@@ -64,8 +64,8 @@ io.on("connection", (socket) => {
 
     socket.on("videoFrame", (frame) => {
         if (pythonProcess) {
-            const dataToSend = { frame: frame.split('base64,')[1] };  // Extract base64 part
-            pythonProcess.stdin.write(JSON.stringify(dataToSend) + '\n'); // Send to Python
+            const dataToSend = { frame: frame.split('base64,')[1] };
+            pythonProcess.stdin.write(JSON.stringify(dataToSend) + '\n');
         }
     });
 
@@ -79,7 +79,7 @@ io.on("connection", (socket) => {
 });
 
 
-const port = process.env.PORT || 3000; // Use environment port or 3000
+const port = process.env.PORT || 3000;
 server.listen(port, () => {
     console.log("Listening on " + port);
 });
