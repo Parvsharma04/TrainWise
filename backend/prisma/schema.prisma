@@ -1,0 +1,56 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model user {
+  id       String @id @default(uuid())
+  name     String
+  email    String @unique
+  password String
+
+  user_details    user_details? @relation(fields: [user_details_id], references: [id])
+  user_details_id String?       @unique // Ensures one-to-many mapping
+
+  user_badges    user_badges? @relation(fields: [user_badges_id], references: [id])
+  user_badges_id String?      @unique // Ensures one-to-many mapping
+}
+
+model user_details {
+  id              String @id @default(uuid())
+  avatar          String
+  time_worked_out Int
+  score           Int
+  streak          Int
+  weight          Int
+  height          Int
+  gender          String
+  age             Int
+
+  user user[]
+}
+
+model user_badges {
+  id          String @id @default(uuid())
+  name        String
+  description String
+  image       String
+
+  user user[]
+}
+
+model exercises {
+  id         String     @id @default(uuid())
+  name       String
+  difficulty difficulty
+}
+
+enum difficulty {
+  EASY
+  MEDIUM
+  HARD
+}
