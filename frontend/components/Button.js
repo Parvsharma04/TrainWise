@@ -1,4 +1,4 @@
-"use client"; // Mark this component as a Client Component
+"use client";
 
 import clsx from "clsx";
 import Link from "next/link";

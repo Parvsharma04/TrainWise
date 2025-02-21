@@ -30,9 +30,9 @@ export default function Activity() {
       setSocket(null);
     });
 
-    newSocket.on("trackingData", (data)=>{
-      setReps(data.pushup_count)
-    })
+    newSocket.on("trackingData", (data) => {
+      setReps(data.pushup_count);
+    });
 
     return () => {
       newSocket.disconnect();
@@ -54,10 +54,9 @@ export default function Activity() {
       }
     };
 
-    let timeInterval = setInterval(()=>{
-      setTimeInSec(prev=>prev+1);
-    }, 1000)
-
+    let timeInterval = setInterval(() => {
+      setTimeInSec((prev) => prev + 1);
+    }, 1000);
 
     getVideo();
   }, []);
@@ -100,7 +99,7 @@ export default function Activity() {
         autoPlay
         muted
         playsInline
-        style={{ width: window.innerWidth, height: window.innerHeight}}
+        style={{ width: window.innerWidth, height: window.innerHeight }}
         className=""
       ></video>
 
@@ -117,21 +116,27 @@ export default function Activity() {
 
       {activityStarted && (
         <div className="fixed inset-0 font-['general'] p-2">
-        
-        <div>
-        <span className="text-2xl">Current reps: {reps}</span>
-        </div>
+          <div>
+            <span className="text-2xl">Current reps: {reps}</span>
+          </div>
 
-        <div className="fixed bottom-0 right-0">
-        <span>Current workout: Pushups</span>
+          <div className="fixed bottom-0 right-0">
+            <span>Current workout: Pushups</span>
           </div>
 
           <div className="fixed top-0 right-0 text-5xl">
-        <span>{Math.round(timeInSec/60<=9)?"0"+Math.round(timeInSec/60):Math.round(timeInSec/60)}:{Math.round(timeInSec%60)<=9?"0"+timeInSec%60:timeInSec%60}</span>
+            <span>
+              {Math.round(timeInSec / 60 <= 9)
+                ? "0" + Math.round(timeInSec / 60)
+                : Math.round(timeInSec / 60)}
+              :
+              {Math.round(timeInSec % 60) <= 9
+                ? "0" + (timeInSec % 60)
+                : timeInSec % 60}
+            </span>
           </div>
         </div>
-      )
-      }
+      )}
 
       <canvas ref={canvasRef} style={{ display: "none" }}></canvas>
     </div>

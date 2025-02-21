@@ -40,9 +40,11 @@ model user_badges {
 }
 
 model exercises {
-  id         String     @id @default(uuid())
-  name       String
-  difficulty difficulty
+  id          String     @id @default(uuid())
+  name        String
+  difficulty  difficulty
+  description String?
+  image_url   String?
 }
 
 enum difficulty {
