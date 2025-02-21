@@ -92,7 +92,6 @@ while True:
                         ret, encoded_image = cv2.imencode('.jpg', image, [cv2.IMWRITE_JPEG_QUALITY, 80])
                         frame_to_send = base64.b64encode(encoded_image).decode('utf-8')
                         result_to_send = {
-                            "squat_count": exercise_counters['squat']['count'],
                             "pushup_count": exercise_counters['pushup']['count'],
                             "frame": frame_to_send
                         }
