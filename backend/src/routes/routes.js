@@ -6,7 +6,7 @@ const prisma = new PrismaClient();
 router.get("/", (req, res) => {
   res.send("server is running and up");
 });
-router.get("/health", (res, res) => {
+router.get("/health", (req, res) => {
   res.send("server is healthy");
 });
 router.post("/signup", (req, res) => {});
