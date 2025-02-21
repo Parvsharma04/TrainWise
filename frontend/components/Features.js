@@ -160,7 +160,7 @@ const Features = () => (
                 Exercise Co<b>u</b>nter
               </>
             }
-            description="We count your exercise with the help of AI."
+            description="We count your exercise with the help of AI so you can focus on your goals."
             isComingSoon
           />
         </BentoTilt>
