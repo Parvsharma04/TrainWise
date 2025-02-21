@@ -6,10 +6,7 @@ import { useWindowScroll } from "react-use";
 import { Fragment, useEffect, useRef, useState } from "react";
 import { FiMenu, FiX } from "react-icons/fi";
 
-import Button from "./Button";
 import Link from "next/link";
-
-const navItems = ["Home", "Pricing", "About", "Login"];
 
 const NavBar = () => {
   // State for toggling audio and visual indicator
