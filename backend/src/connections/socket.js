@@ -3,7 +3,7 @@ const { spawn } = require("child_process");
 
 function initializeSocket(server) {
   const io = new Server(server, {
-    cors: "https://localhost:3000"
+    cors: "https://localhost:3000",
   });
 
   io.on("connection", (socket) => {
@@ -13,17 +13,17 @@ function initializeSocket(server) {
 
     socket.on("startTracking", () => {
       console.log("Tracking started...");
-      
+
       if (!pythonProcess) {
-        pythonProcess = spawn("python", ["../../model/squats.py"]);
+        pythonProcess = spawn("python", ["../model/squats.py"]);
 
         pythonProcess.stdout.on("data", (data) => {
           // console.log(data);
-          
+
           try {
             const receivedData = JSON.parse(data.toString());
             //console.log(receivedData);
-            
+
             io.emit("trackingData", receivedData);
           } catch (error) {
             console.error("Error parsing JSON:", error);
@@ -63,7 +63,7 @@ function initializeSocket(server) {
 
     socket.on("videoFrame", (frame) => {
       //console.log("adasd");
-      
+
       if (pythonProcess) {
         const dataToSend = { frame: frame.split("base64,")[1] };
         pythonProcess.stdin.write(JSON.stringify(dataToSend) + "\n");

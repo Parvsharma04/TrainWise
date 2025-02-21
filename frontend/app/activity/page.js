@@ -31,7 +31,8 @@ export default function Activity() {
     });
 
     newSocket.on("trackingData", (data) => {
-      setReps(data.pushup_count);
+      console.log(data);
+      if (data.pushup_count) setReps(data.pushup_count);
     });
 
     return () => {
@@ -53,10 +54,6 @@ export default function Activity() {
         console.error("Error accessing camera:", err);
       }
     };
-
-    let timeInterval = setInterval(() => {
-      setTimeInSec((prev) => prev + 1);
-    }, 1000);
 
     getVideo();
   }, []);
@@ -81,51 +78,47 @@ export default function Activity() {
 
     const frameInterval = setInterval(captureFrame, 100); // Send frame every 100ms
 
-    return () => clearInterval(frameInterval);
+    let timeInterval = setInterval(() => {
+      setTimeInSec((prev) => prev + 1);
+    }, 1000);
+
+    return () => {
+      clearInterval(frameInterval);
+      clearInterval(timeInterval);
+    };
   }, [activityStarted, socket]);
 
   function startActivity() {
-    console.log("Activity started!");
-    if (socket) {
-      socket.emit("startTracking");
+    if (activityStarted) {
+      setActivityStarted(false);
+      console.log("Activity stoped!");
+      socket?.emit("stopTracking");
+      setTimeInSec(0);
+      setReps(0);
+    } else {
+      console.log("Activity started!");
+      setActivityStarted(true);
+      socket?.emit("startTracking");
     }
-    setActivityStarted(true);
   }
 
   return (
-    <div className="font-['general'] z-50">
+    <div className="font-['general'] z-50 flex">
       <video
         ref={videoRef}
         autoPlay
         muted
         playsInline
-        style={{ width: window.innerWidth, height: window.innerHeight }}
+        style={{ width: window.innerWidth - 200, height: window.innerHeight }}
         className=""
       ></video>
+      <canvas ref={canvasRef} style={{ display: "none" }}></canvas>
+      <div className="p-3 bg-[#fff] grow-1 m-4 rounded-xl flex flex-col justify-between">
+        <div>
+          <h3 className="text-2xl">Excercise tracker</h3>
 
-      {!activityStarted && (
-        <div className="fixed inset-0 flex items-center justify-center">
-          <button
-            className="bg-[#0056F1] text-white px-3 py-2"
-            onClick={startActivity}
-          >
-            Start
-          </button>
-        </div>
-      )}
-
-      {activityStarted && (
-        <div className="fixed inset-0 font-['general'] p-2">
-          <div>
-            <span className="text-2xl">Current reps: {reps}</span>
-          </div>
-
-          <div className="fixed bottom-0 right-0">
-            <span>Current workout: Pushups</span>
-          </div>
-
-          <div className="fixed top-0 right-0 text-5xl">
-            <span>
+          <div className="text-sm text-center m-4 p-2 outline outline-1 outline-[#888] rounded">
+            <span className="text-3xl block">
               {Math.round(timeInSec / 60 <= 9)
                 ? "0" + Math.round(timeInSec / 60)
                 : Math.round(timeInSec / 60)}
@@ -135,10 +128,21 @@ export default function Activity() {
                 : timeInSec % 60}
             </span>
           </div>
-        </div>
-      )}
 
-      <canvas ref={canvasRef} style={{ display: "none" }}></canvas>
+          <div className="text-sm text-center m-4 p-2 outline outline-1 outline-[#888] rounded">
+            <span className="text-3xl block">{reps}</span>
+            reps
+          </div>
+        </div>
+        <div>
+          <button
+            className="bg-[#0056F1] text-white px-3 py-2 w-[100%]"
+            onClick={startActivity}
+          >
+            {!activityStarted ? "Start" : "Stop"}
+          </button>
+        </div>
+      </div>
     </div>
   );
 }

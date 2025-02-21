@@ -11,7 +11,7 @@ router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({ extended: false }));
 
 router.get("/", (req, res) => {
-  res.sendFile(__dirname + "/index.html")
+  res.sendFile(__dirname + "/index.html");
 });
 router.get("/health", (req, res) => {
   res.send("Server is healthy");
@@ -21,6 +21,7 @@ router.post("/signup", async (req, res) => {
   try {
     const { name, email, password } = req.body;
     console.log(req.body);
+
     // Check if the user already exists
     const existingUser = await prisma.user.findUnique({
       where: { email },
@@ -33,7 +34,7 @@ router.post("/signup", async (req, res) => {
     // Hash the password before storing it
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Create the user
+    // Create the user with related tables
     const newUser = await prisma.user.create({
       data: {
         email,
@@ -48,6 +49,22 @@ router.post("/signup", async (req, res) => {
       },
     });
 
+    // Get all available exercises to add to user_exercises
+    const exercises = await prisma.exercises.findMany();
+
+    // Create default exercise entries for the user
+    if (exercises.length > 0) {
+      await prisma.user_exercises.createMany({
+        data: exercises.map((exercise) => ({
+          userId: newUser.id,
+          exerciseId: exercise.id,
+          progress: 0,
+          completed: false,
+        })),
+      });
+    }
+
+    // Generate JWT token
     const token = jwt.sign({ userId: newUser.id }, process.env.JWT_SECRET, {
       expiresIn: "1h",
     });
@@ -58,6 +75,8 @@ router.post("/signup", async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 });
+
+module.exports = router;
 
 router.post("/login", async (req, res) => {
   try {

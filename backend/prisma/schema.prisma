@@ -8,14 +8,17 @@ datasource db {
 }
 
 model user {
-  id              String        @id @default(uuid())
+  id              String           @id @default(uuid())
   name            String
-  email           String        @unique
+  email           String           @unique
   password        String
-  user_details_id String?       @unique
-  user_badges_id  String?       @unique
-  user_badges     user_badges?  @relation(fields: [user_badges_id], references: [id])
-  user_details    user_details? @relation(fields: [user_details_id], references: [id])
+  user_details_id String?          @unique
+  user_badges_id  String?          @unique
+  user_badges     user_badges?     @relation(fields: [user_badges_id], references: [id])
+  user_details    user_details?    @relation(fields: [user_details_id], references: [id])
+  pushups         push_db[]
+  squats          squats_db[]
+  user_exercises  user_exercises[]
 }
 
 model user_details {
@@ -40,11 +43,40 @@ model user_badges {
 }
 
 model exercises {
-  id          String     @id @default(uuid())
-  name        String
-  difficulty  difficulty
-  description String?
-  image_url   String?
+  id             String           @id @default(uuid())
+  name           String
+  difficulty     difficulty
+  description    String?
+  image_url      String?
+  user_exercises user_exercises[]
+}
+
+model push_db {
+  id        String   @id @default(uuid())
+  userId    String
+  count     Int
+  createdAt DateTime @default(now())
+  user      user     @relation(fields: [userId], references: [id])
+}
+
+model squats_db {
+  id        String   @id @default(uuid())
+  userId    String
+  count     Int
+  createdAt DateTime @default(now())
+  user      user     @relation(fields: [userId], references: [id])
+}
+
+model user_exercises {
+  id         String   @id @default(uuid())
+  userId     String
+  exerciseId String
+  progress   Int      @default(0) // Tracks user progress on the exercise
+  completed  Boolean  @default(false)
+  createdAt  DateTime @default(now())
+
+  user     user      @relation(fields: [userId], references: [id])
+  exercise exercises @relation(fields: [exerciseId], references: [id])
 }
 
 enum difficulty {
