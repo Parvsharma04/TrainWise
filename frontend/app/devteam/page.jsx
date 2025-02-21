@@ -49,7 +49,7 @@ export default function DevTeamPage() {
     {
       name: "ARSHDEEP ROOPRAI",
       role: "Full Stack Developer",
-      image: "#",
+      image: "https://avatars.githubusercontent.com/u/108752646?v=4",
       github: "https://github.com/Arshdeep-13",
       linkedin: "https://www.linkedin.com/in/arshdeeprooprai",
       mail: "arshdeeprooprai@gmail.com",
@@ -57,7 +57,7 @@ export default function DevTeamPage() {
     {
       name: "PARV SHARMA",
       role: "Full Stack Developer",
-      image: "#",
+      image: "https://avatars.githubusercontent.com/u/115033639?v=4",
       github: "https://github.com/Parvsharma04",
       linkedin: "https://www.linkedin.com/in/parv-sharma-470498259",
       mail: "sharmaparv.2004@gmail.com",
@@ -65,7 +65,7 @@ export default function DevTeamPage() {
     {
       name: "AVI RANA",
       role: "Full Stack Developer",
-      image: "#",
+      image: "https://avatars.githubusercontent.com/u/68737072?v=4",
       github: "https://github.com/Avi-Rana-1718",
       linkedin: "https://www.linkedin.com/in/avi-rana",
       mail: "hello@avirana.com",
@@ -73,7 +73,7 @@ export default function DevTeamPage() {
     {
       name: "PRIYANSHU GUPTA",
       role: "Full Stack Developer",
-      image: "#",
+      image: "img.jpg",
       github: "https://github.com/PriyanshuGupta19",
       linkedin: "https://www.linkedin.com/in/priyanshu-gupta-671309252/",
       mail: "priyanshugupta2028@gmail.com",
