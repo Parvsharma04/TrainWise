@@ -2,9 +2,9 @@
 
 import clsx from "clsx";
 import gsap from "gsap";
-import { useWindowScroll } from "react-use";
-import { Fragment, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { FiMenu, FiX } from "react-icons/fi";
+import { useWindowScroll } from "react-use";
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -15,6 +15,8 @@ const NavBar = () => {
   const [isIndicatorActive, setIsIndicatorActive] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const pathname = usePathname();
+
+  const whiteLinks = ["/", "/pricing"];
 
   // Refs for audio and navigation container
   const audioElementRef = useRef(null);
@@ -83,7 +85,7 @@ const NavBar = () => {
               <Link
                 href={`/`}
                 className={`nav-hover-btn md:!text-lg ${
-                  pathname != "/" ? "!text-black" : ""
+                  !whiteLinks.find((e) => e == pathname) ? "!text-black" : ""
                 }`}
               >
                 Home
@@ -91,7 +93,7 @@ const NavBar = () => {
               <Link
                 href={`/pricing`}
                 className={`nav-hover-btn md:!text-lg ${
-                  pathname != "/" ? "!text-black" : ""
+                  !whiteLinks.find((e) => e == pathname) ? "!text-black" : ""
                 }`}
               >
                 Pricing
@@ -99,7 +101,7 @@ const NavBar = () => {
               <Link
                 href={`/about`}
                 className={`nav-hover-btn md:!text-lg ${
-                  pathname != "/" ? "!text-black" : ""
+                  !whiteLinks.find((e) => e == pathname) ? "!text-black" : ""
                 }`}
               >
                 About
@@ -107,7 +109,7 @@ const NavBar = () => {
               <Link
                 href={`/auth`}
                 className={`nav-hover-btn md:!text-lg ${
-                  pathname != "/" ? "!text-black" : ""
+                  !whiteLinks.find((e) => e == pathname) ? "!text-black" : ""
                 }`}
               >
                 Login
