@@ -4,6 +4,7 @@ import { useRef, useEffect, useState } from "react";
 import io from "socket.io-client";
 import { jwtDecode } from "jwt-decode";
 import Cookies from "universal-cookie";
+import { toast } from "react-toastify";
 
 export default function Activity() {
   const videoRef = useRef(null);
@@ -66,6 +67,10 @@ export default function Activity() {
   }, []);
 
   useEffect(() => {
+    toast.info("Good job! Keep it up!");
+  }, [reps, setReps]);
+
+  useEffect(() => {
     if (!activityStarted || !videoRef.current || !canvasRef.current || !socket)
       return;
 
@@ -114,6 +119,7 @@ export default function Activity() {
 
       const data = await response.json();
       console.log("Push-up data saved:", data);
+      toast.success("Activity data saved successfully!");
     } catch (error) {
       console.error("Error saving activity data:", error);
     }
