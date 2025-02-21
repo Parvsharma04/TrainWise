@@ -19,6 +19,7 @@ model user {
   pushups         push_db[]
   squats          squats_db[]
   user_exercises  user_exercises[]
+  exercise_logs   exercise_logs[]
 }
 
 model user_details {
@@ -49,6 +50,8 @@ model exercises {
   description    String?
   image_url      String?
   user_exercises user_exercises[]
+
+  exercise_logs exercise_logs[]
 }
 
 model push_db {
@@ -75,8 +78,24 @@ model user_exercises {
   completed  Boolean  @default(false)
   createdAt  DateTime @default(now())
 
-  user     user      @relation(fields: [userId], references: [id])
-  exercise exercises @relation(fields: [exerciseId], references: [id])
+  user     user            @relation(fields: [userId], references: [id])
+  exercise exercises       @relation(fields: [exerciseId], references: [id])
+  logs     exercise_logs[]
+}
+
+model exercise_logs {
+  id             String   @id @default(uuid())
+  userId         String
+  exerciseId     String
+  userExerciseId String
+  timeSecs       Int      @default(0) // Time spent in seconds
+  reps           Int      @default(0) // Number of reps performed
+  score          Int      @default(0) // Score earned in this session
+  createdAt      DateTime @default(now())
+
+  user         user           @relation(fields: [userId], references: [id])
+  exercise     exercises      @relation(fields: [exerciseId], references: [id])
+  userExercise user_exercises @relation(fields: [userExerciseId], references: [id])
 }
 
 enum difficulty {
