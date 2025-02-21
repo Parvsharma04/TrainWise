@@ -1,4 +1,4 @@
-import ExerciseCard from "@/components/ExerciseCard";
+import ExerciseCard from "./ExcerciseCard";
 
 export default function ExerciseList({ exercises }) {
   return (

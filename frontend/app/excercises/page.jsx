@@ -1,22 +1,32 @@
-import ExerciseList from "@/components/ExerciseList";
+"use client";
+import ExerciseList from "@/components/ExcerciseList";
 import axios from "axios";
-async function getExercises() {
-  const res = await axios(
-    `${process.env.NEXT_PUBLIC_LOCAL_BACKEND_URL}/exercises`
-  );
-  if (!res.ok) {
-    throw new Error("Failed to fetch exercises");
-  }
-  return res.json();
-}
+import { useEffect, useState } from "react";
 
-export default async function Home() {
-  const exercises = await getExercises();
+export default function Home() {
+  const [data, setData] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await axios.get(
+          `${process.env.NEXT_PUBLIC_LOCAL_BACKEND_URL}/v1`
+        );
+        setData(res.data);
+      } catch (error) {
+        console.error("Failed to fetch exercises:", error);
+      }
+    };
+
+    fetchData(); // Call the async function
+  }, []); // Empty dependency array ensures it runs only once
+
+  if (!data) return <p>Loading...</p>;
 
   return (
     <main className="container mx-auto px-4 py-8">
       <h1 className="text-3xl font-bold mb-6">Exercise List</h1>
-      <ExerciseList exercises={exercises} />
+      <ExerciseList exercises={data} />
     </main>
   );
 }
