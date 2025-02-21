@@ -25,7 +25,7 @@ export default function RootLayout({ children }) {
       >
         <ToastContainer
           position="top-right"
-          autoClose={5000}
+          autoClose={2700}
           hideProgressBar={false}
           newestOnTop={false}
           closeOnClick={false}
@@ -34,7 +34,6 @@ export default function RootLayout({ children }) {
           draggable
           pauseOnHover
           theme="light"
-          transition={Bounce}
         />
         {children}
       </body>

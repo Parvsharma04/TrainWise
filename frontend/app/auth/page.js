@@ -32,6 +32,7 @@ export default function Auth() {
           formData
         );
       } else {
+        // for login
         response = await axios.post(
           `${process.env.NEXT_PUBLIC_LOCAL_BACKEND_URL}/user/login`,
           {
@@ -41,9 +42,11 @@ export default function Auth() {
         );
       }
       toast.success("Login Successful.");
-      if (token) {
+      if (response.data.token) {
         cookies.set("token", response.data.token);
-        router.push("/");
+        setTimeout(() => {
+          router.push("/");
+        }, 3000);
       }
     } catch (error) {
       console.log(error);
