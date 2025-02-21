@@ -9,6 +9,8 @@ mp_pose = mp.solutions.pose
 mp_drawing = mp.solutions.drawing_utils
 pose = mp_pose.Pose()
 
+print("In python code")
+
 def calculate_angle(a, b, c):
     a = np.array(a)
     b = np.array(b)
