@@ -22,12 +22,11 @@ app.use(express.json());
 
 app.post("/api/pushups", async (req, res) => {
   try {
-    const { time_in_sec, user_id, reps, name } = req.body;
+    const { userId, exerciseName, reps, timeInSec } = req.body;
 
     // Check if user exists
     const user = await prisma.user.findUnique({
-      where: { id: user_id },
-      include: { user_details: true },
+      where: { id: userId },
     });
 
     if (!user) {
@@ -35,17 +34,17 @@ app.post("/api/pushups", async (req, res) => {
     }
 
     // Determine exercise type and insert workout data
-    if (name.toLowerCase() === "pushups") {
+    if (exerciseName.toLowerCase() === "pushups") {
       await prisma.push_db.create({
         data: {
-          userId: user_id,
+          userId: userId,
           count: reps,
         },
       });
-    } else if (name.toLowerCase() === "squats") {
+    } else if (exerciseName.toLowerCase() === "squats") {
       await prisma.squats_db.create({
         data: {
-          userId: user_id,
+          userId: userId,
           count: reps,
         },
       });
@@ -58,7 +57,7 @@ app.post("/api/pushups", async (req, res) => {
       where: { id: user.user_details_id },
       data: {
         time_worked_out: {
-          increment: time_in_sec, // Increment time worked out
+          increment: timeInSec, // Increment time worked out
         },
       },
     });

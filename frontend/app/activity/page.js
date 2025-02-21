@@ -2,21 +2,28 @@
 
 import { useRef, useEffect, useState } from "react";
 import io from "socket.io-client";
+import { jwtDecode } from "jwt-decode";
+import Cookies from "universal-cookie";
 
 export default function Activity() {
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
-
-  const [windowDimensions, setWindowDimensions] = useState({
-    width: window.innerWidth,
-    height: window.innerHeight,
-  });
+  const [decodedToken, setDecodedToken] = useState("");
+  const cookies = new Cookies();
 
   const [socket, setSocket] = useState(null);
   const [activityStarted, setActivityStarted] = useState(false);
+
+  // user activity details
+  const [name, setName] = useState("Pushups");
   const [reps, setReps] = useState(0);
   const [timeInSec, setTimeInSec] = useState(0);
 
+  useEffect(() => {
+    const token = cookies.get("token");
+    const decoded = jwtDecode(token);
+    setDecodedToken(decoded.userId);
+  }, []);
   useEffect(() => {
     const newSocket = io("http://localhost:8000");
 
@@ -88,11 +95,39 @@ export default function Activity() {
     };
   }, [activityStarted, socket]);
 
+  async function saveActivityData() {
+    const activityData = {
+      userId: decodedToken,
+      exerciseName: name,
+      reps,
+      timeInSec,
+    };
+
+    try {
+      const response = await fetch("http://localhost:8000/api/pushups", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(activityData),
+      });
+
+      const data = await response.json();
+      console.log("Push-up data saved:", data);
+    } catch (error) {
+      console.error("Error saving activity data:", error);
+    }
+  }
+
   function startActivity() {
     if (activityStarted) {
       setActivityStarted(false);
-      console.log("Activity stoped!");
+      console.log("Activity stopped!");
       socket?.emit("stopTracking");
+
+      // Send data to backend
+      saveActivityData();
+
       setTimeInSec(0);
       setReps(0);
     } else {
@@ -113,19 +148,16 @@ export default function Activity() {
         className=""
       ></video>
       <canvas ref={canvasRef} style={{ display: "none" }}></canvas>
-      <div className="p-3 bg-[#fff] grow-1 m-4 rounded-xl flex flex-col justify-between">
+      <div className="p-3 bg-[#fff] m-4 rounded-xl flex flex-col justify-between">
         <div>
-          <h3 className="text-2xl">Excercise tracker</h3>
+          <h3 className="text-2xl">Exercise Tracker</h3>
 
           <div className="text-sm text-center m-4 p-2 outline outline-1 outline-[#888] rounded">
             <span className="text-3xl block">
-              {Math.round(timeInSec / 60 <= 9)
-                ? "0" + Math.round(timeInSec / 60)
-                : Math.round(timeInSec / 60)}
-              :
-              {Math.round(timeInSec % 60) <= 9
-                ? "0" + (timeInSec % 60)
-                : timeInSec % 60}
+              {Math.floor(timeInSec / 60)
+                .toString()
+                .padStart(2, "0")}
+              :{(timeInSec % 60).toString().padStart(2, "0")}
             </span>
           </div>
 
