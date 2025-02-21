@@ -11,7 +11,7 @@ router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({ extended: false }));
 
 router.get("/", (req, res) => {
-  res.send("Server is running and up");
+  res.sendFile(__dirname + "/index.html")
 });
 router.get("/health", (req, res) => {
   res.send("Server is healthy");

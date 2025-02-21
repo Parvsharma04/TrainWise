@@ -5,9 +5,11 @@ import gsap from "gsap";
 import { useEffect, useRef, useState } from "react";
 import { FiMenu, FiX } from "react-icons/fi";
 import { useWindowScroll } from "react-use";
+import Cookies from "universal-cookie";
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 const NavBar = () => {
   // State for toggling audio and visual indicator
@@ -15,6 +17,9 @@ const NavBar = () => {
   const [isIndicatorActive, setIsIndicatorActive] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const pathname = usePathname();
+  const cookies = new Cookies();
+  const [isAuth, setIsAuth] = useState(false);
+  const router = useRouter();
 
   const whiteLinks = ["/", "/pricing"];
 
@@ -31,6 +36,15 @@ const NavBar = () => {
     setIsAudioPlaying((prev) => !prev);
     setIsIndicatorActive((prev) => !prev);
   };
+
+  useEffect(() => {
+    if (cookies.get("token")) {
+      setIsAuth(true);
+    } else {
+      setIsAuth(false);
+      router.push("/auth");
+    }
+  }, []);
 
   // Manage audio playback
   useEffect(() => {
@@ -70,7 +84,7 @@ const NavBar = () => {
   return (
     <div
       ref={navContainerRef}
-      className="fixed inset-x-0 top-4 z-50 h-16 border-none transition-all duration-700 sm:inset-x-6"
+      className="fixed inset-x-0 top-4 z-40 h-16 border-none transition-all duration-700 sm:inset-x-6"
     >
       <header className="absolute top-1/2 w-full -translate-y-1/2">
         <nav className="flex size-full items-center justify-between p-4">
@@ -90,6 +104,36 @@ const NavBar = () => {
               >
                 Home
               </Link>
+              {isAuth && (
+                <Link
+                  href={`/activity`}
+                  className={`nav-hover-btn md:!text-lg ${
+                    !whiteLinks.find((e) => e == pathname) ? "!text-black" : ""
+                  }`}
+                >
+                  Activity
+                </Link>
+              )}
+              {isAuth && (
+                <Link
+                  href={`/leaderboard`}
+                  className={`nav-hover-btn md:!text-lg ${
+                    !whiteLinks.find((e) => e == pathname) ? "!text-black" : ""
+                  }`}
+                >
+                  Leaderboard
+                </Link>
+              )}
+              {isAuth && (
+                <Link
+                  href={`/dashboard`}
+                  className={`nav-hover-btn md:!text-lg ${
+                    !whiteLinks.find((e) => e == pathname) ? "!text-black" : ""
+                  }`}
+                >
+                  Dashboard
+                </Link>
+              )}
               <Link
                 href={`/pricing`}
                 className={`nav-hover-btn md:!text-lg ${
@@ -99,21 +143,36 @@ const NavBar = () => {
                 Pricing
               </Link>
               <Link
-                href={`/about`}
+                href={`/devteam`}
                 className={`nav-hover-btn md:!text-lg ${
                   !whiteLinks.find((e) => e == pathname) ? "!text-black" : ""
                 }`}
               >
                 About
               </Link>
-              <Link
-                href={`/auth`}
-                className={`nav-hover-btn md:!text-lg ${
-                  !whiteLinks.find((e) => e == pathname) ? "!text-black" : ""
-                }`}
-              >
-                Login
-              </Link>
+              {isAuth ? (
+                <button
+                  onClick={() => {
+                    cookies.remove("token");
+                    setIsAuth(false);
+                    router.push("/auth");
+                  }}
+                  className={`nav-hover-btn md:!text-lg ${
+                    !whiteLinks.find((e) => e == pathname) ? "!text-black" : ""
+                  }`}
+                >
+                  Logout
+                </button>
+              ) : (
+                <Link
+                  href={`/auth`}
+                  className={`nav-hover-btn md:!text-lg ${
+                    !whiteLinks.find((e) => e == pathname) ? "!text-black" : ""
+                  }`}
+                >
+                  Login
+                </Link>
+              )}
             </div>
 
             <button
@@ -161,35 +220,77 @@ const NavBar = () => {
             <FiX size={24} />
           </button>
         </div>
-        <nav className="flex flex-col p-4 space-y-4 bg-gray-700 h-screen text-black">
+        <nav className="flex flex-col p-4 space-y-4 bg-gray-700 h-screen">
           <Link
             href={`/`}
             onClick={() => setIsSidebarOpen(false)}
-            className="nav-hover-btn md:!text-md "
+            className={`nav-hover-btn md:!text-lg !mx-0 !text-white`}
           >
             Home
           </Link>
+          {isAuth && (
+            <Link
+              href={`/activity`}
+              onClick={() => setIsSidebarOpen(false)}
+              className={`nav-hover-btn md:!text-lg !mx-0`}
+            >
+              Activity
+            </Link>
+          )}
+          {isAuth && (
+            <Link
+              href={`/leaderboard`}
+              onClick={() => setIsSidebarOpen(false)}
+              className={`nav-hover-btn md:!text-lg !mx-0`}
+            >
+              Leaderboard
+            </Link>
+          )}
+          {isAuth && (
+            <Link
+              href={`/dashboard`}
+              onClick={() => setIsSidebarOpen(false)}
+              className={`nav-hover-btn md:!text-lg !mx-0 `}
+            >
+              Dashboard
+            </Link>
+          )}
           <Link
             href={`/pricing`}
             onClick={() => setIsSidebarOpen(false)}
-            className="nav-hover-btn !text-md "
+            className={`nav-hover-btn md:!text-lg !mx-0 !text-white`}
           >
             Pricing
           </Link>
           <Link
-            href={`/about`}
+            href={`/devteam`}
             onClick={() => setIsSidebarOpen(false)}
-            className="nav-hover-btn !text-md "
+            className={`nav-hover-btn md:!text-lg !mx-0 !text-white`}
           >
             About
           </Link>
-          <Link
-            href={`/auth`}
-            onClick={() => setIsSidebarOpen(false)}
-            className="nav-hover-btn !text-md "
-          >
-            Login
-          </Link>
+          {isAuth ? (
+            <Link
+              href={"/"}
+              onClick={() => {
+                cookies.remove("token");
+                setIsAuth(false);
+                router.push("/auth");
+                setIsSidebarOpen(false);
+              }}
+              className={`nav-hover-btn !mx-0 md:!text-lg`}
+            >
+              Logout
+            </Link>
+          ) : (
+            <Link
+              href={`/auth`}
+              onClick={() => setIsSidebarOpen(false)}
+              className={`nav-hover-btn md:!text-lg !mx-0`}
+            >
+              Login
+            </Link>
+          )}
         </nav>
       </div>
     </div>

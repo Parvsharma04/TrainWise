@@ -45,8 +45,8 @@ export default function Auth() {
       if (response.data.token) {
         cookies.set("token", response.data.token);
         setTimeout(() => {
-          router.push("/dashboard");
-        }, 3000);
+          window.location.href = "/dashboard";
+        }, 1100);
       }
     } catch (error) {
       console.log(error);

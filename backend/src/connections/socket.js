@@ -18,8 +18,12 @@ function initializeSocket(server) {
         pythonProcess = spawn("python", ["../../model/squats.py"]);
 
         pythonProcess.stdout.on("data", (data) => {
+          // console.log(data);
+          
           try {
             const receivedData = JSON.parse(data.toString());
+            //console.log(receivedData);
+            
             io.emit("trackingData", receivedData);
           } catch (error) {
             console.error("Error parsing JSON:", error);
@@ -28,7 +32,7 @@ function initializeSocket(server) {
         });
 
         pythonProcess.stderr.on("data", (data) => {
-          console.error(`Python script error: ${data}`);
+          console.error(`Python error: ${data}`);
           socket.emit("trackingError", data.toString());
         });
 
@@ -58,7 +62,7 @@ function initializeSocket(server) {
     });
 
     socket.on("videoFrame", (frame) => {
-      console.log(frame);
+      //console.log("adasd");
       
       if (pythonProcess) {
         const dataToSend = { frame: frame.split("base64,")[1] };
