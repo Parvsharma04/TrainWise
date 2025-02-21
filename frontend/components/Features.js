@@ -152,7 +152,7 @@ const Features = () => (
           />
         </BentoTilt>
 
-        <BentoTilt className="bento-tilt_1 me-14 md:col-span-1 md:me-0">
+        {/* <BentoTilt className="bento-tilt_1 me-14 md:col-span-1 md:me-0">
           <BentoCard
             src="videos/feature-4.mp4"
             title={
@@ -163,7 +163,7 @@ const Features = () => (
             description="Get AI-powered tutorials tailored to your fitness level and goals!"
             isComingSoon
           />
-        </BentoTilt>
+        </BentoTilt> */}
 
         <BentoTilt className="bento-tilt_2">
           <div className="flex size-full flex-col justify-between bg-green-600 p-5">
