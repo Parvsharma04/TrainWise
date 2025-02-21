@@ -30,10 +30,9 @@ export default function Activity() {
       setSocket(null);
     });
 
-    newSocket.on("trackingData", (data)=>{
+    newSocket.on("trackingData", (data) => {
       console.log(data);
-      
-    })
+    });
 
     return () => {
       newSocket.disconnect();
@@ -90,7 +89,7 @@ export default function Activity() {
   }
 
   return (
-    <div className="font-['general']">
+    <div className="font-['general'] bg-white">
       <video
         ref={videoRef}
         autoPlay
@@ -101,7 +100,7 @@ export default function Activity() {
       ></video>
 
       {!activityStarted && (
-        <div className="fixed inset-0 flex items-center justify-center z-50">
+        <div className="fixed inset-0 flex items-center justify-center">
           <button
             className="bg-[#0056F1] text-white px-3 py-2"
             onClick={startActivity}
