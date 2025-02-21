@@ -15,7 +15,7 @@ app.use(cors());
 app.use(router);
 
 app.use("/user", userRouter);
-app.use("/excercises", excerciseRouter);
+app.use("/v1", excerciseRouter);
 
 // Initialize WebSocket
 initializeSocket(server);
