@@ -127,17 +127,17 @@ const NavBar = () => {
 
       <div
         className={clsx(
-          "fixed -top-5 inset-y-0 left-0 z-50 w-64 bg-white shadow-lg transform transition-transform duration-300 md:hidden",
+          "fixed -top-5 inset-y-0 left-0 z-50 w-64 bg-black shadow-lg transform transition-transform duration-300 md:hidden",
           isSidebarOpen ? "translate-x-0" : "-translate-x-full"
         )}
       >
         <div className="p-4 flex justify-between items-center border-b">
-          <h2 className="text-lg font-semibold">Menu</h2>
+          <h2 className="text-lg font-semibold text-white">Menu</h2>
           <button onClick={() => setIsSidebarOpen(false)}>
             <FiX size={24} />
           </button>
         </div>
-        <nav className="flex flex-col p-4 space-y-4 bg-gray-700 h-screen">
+        <nav className="flex flex-col p-4 space-y-4 bg-[#5542ff] h-screen">
           <Link
             href={`/`}
             onClick={() => setIsSidebarOpen(false)}
