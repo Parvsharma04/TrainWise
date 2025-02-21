@@ -7,12 +7,14 @@ import { Fragment, useEffect, useRef, useState } from "react";
 import { FiMenu, FiX } from "react-icons/fi";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 const NavBar = () => {
   // State for toggling audio and visual indicator
   const [isAudioPlaying, setIsAudioPlaying] = useState(false);
   const [isIndicatorActive, setIsIndicatorActive] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const pathname = usePathname();
 
   // Refs for audio and navigation container
   const audioElementRef = useRef(null);
@@ -78,16 +80,36 @@ const NavBar = () => {
           {/* Navigation Links and Audio Button */}
           <div className="flex h-full items-center">
             <div className="hidden md:block">
-              <Link href={`/`} className="nav-hover-btn md:!text-lg ">
+              <Link
+                href={`/`}
+                className={`nav-hover-btn md:!text-lg ${
+                  pathname != "/" ? "!text-black" : ""
+                }`}
+              >
                 Home
               </Link>
-              <Link href={`/pricing`} className="nav-hover-btn md:!text-lg ">
+              <Link
+                href={`/pricing`}
+                className={`nav-hover-btn md:!text-lg ${
+                  pathname != "/" ? "!text-black" : ""
+                }`}
+              >
                 Pricing
               </Link>
-              <Link href={`/about`} className="nav-hover-btn md:!text-lg ">
+              <Link
+                href={`/about`}
+                className={`nav-hover-btn md:!text-lg ${
+                  pathname != "/" ? "!text-black" : ""
+                }`}
+              >
                 About
               </Link>
-              <Link href={`/auth`} className="nav-hover-btn md:!text-lg ">
+              <Link
+                href={`/auth`}
+                className={`nav-hover-btn md:!text-lg ${
+                  pathname != "/" ? "!text-black" : ""
+                }`}
+              >
                 Login
               </Link>
             </div>
@@ -137,7 +159,7 @@ const NavBar = () => {
             <FiX size={24} />
           </button>
         </div>
-        <nav className="flex flex-col p-4 space-y-4 bg-gray-700 h-screen">
+        <nav className="flex flex-col p-4 space-y-4 bg-gray-700 h-screen text-black">
           <Link
             href={`/`}
             onClick={() => setIsSidebarOpen(false)}
