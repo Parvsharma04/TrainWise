@@ -1,9 +1,8 @@
-import About from "./components/About";
-import Hero from "./components/Hero";
-import NavBar from "./components/NavBar";
-import Features from "./components/Features";
-import Contact from "./components/Contact";
-import Footer from "./components/Footr";
+import About from "../components/About";
+import Contact from "../components/Contact";
+import Features from "../components/Features";
+import Hero from "../components/Hero";
+import NavBar from "../components/NavBar";
 
 export default function Home() {
   return (
