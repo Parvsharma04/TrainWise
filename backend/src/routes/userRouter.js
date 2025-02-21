@@ -20,7 +20,7 @@ router.get("/health", (req, res) => {
 router.post("/signup", async (req, res) => {
   try {
     const { name, email, password } = req.body;
-
+    console.log(req.body);
     // Check if the user already exists
     const existingUser = await prisma.user.findUnique({
       where: { email },
