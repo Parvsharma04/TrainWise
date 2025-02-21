@@ -84,7 +84,7 @@ const NavBar = () => {
   return (
     <div
       ref={navContainerRef}
-      className="fixed inset-x-0 top-4 z-40 h-16 border-none transition-all duration-700 sm:inset-x-6"
+      className="fixed inset-x-0 top-4 z-10 h-16 border-none transition-all duration-700 sm:inset-x-6"
     >
       <header className="absolute top-1/2 w-full -translate-y-1/2">
         <nav className="flex size-full items-center justify-between p-4">
@@ -210,7 +210,7 @@ const NavBar = () => {
 
       <div
         className={clsx(
-          "fixed -top-5 inset-y-0 left-0 z-50 w-64 bg-black shadow-lg transform transition-transform duration-300 md:hidden",
+          "fixed -top-5 inset-y-0 left-0 z-10 w-64 bg-black shadow-lg transform transition-transform duration-300 md:hidden",
           isSidebarOpen ? "translate-x-0" : "-translate-x-full"
         )}
       >
