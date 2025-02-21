@@ -7,6 +7,7 @@ import { Clock, Dumbbell, Scale } from "lucide-react";
 import Image from "next/image";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import WorkoutHeatMap from "@/components/WorkoutHeatMap";
 import BadgeSummary from "../../components/BadgeSummary";
 const Dashboard = () => {
   const router = useRouter();
@@ -72,7 +73,9 @@ const Dashboard = () => {
           <CardHeader>
             <CardTitle>Workout Frequency</CardTitle>
           </CardHeader>
-          <CardContent>{/* <WorkoutHeatmap /> */}</CardContent>
+          <CardContent>
+            <WorkoutHeatMap />
+          </CardContent>
         </Card>
       </div>
 
