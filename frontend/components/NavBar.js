@@ -137,17 +137,33 @@ const NavBar = () => {
             <FiX size={24} />
           </button>
         </div>
-        <nav className="flex flex-col p-4 space-y-4 bg-white h-screen">
-          <Link href={`/`} className="nav-hover-btn md:!text-lg ">
+        <nav className="flex flex-col p-4 space-y-4 bg-gray-700 h-screen">
+          <Link
+            href={`/`}
+            onClick={() => setIsSidebarOpen(false)}
+            className="nav-hover-btn md:!text-md "
+          >
             Home
           </Link>
-          <Link href={`/pricing`} className="nav-hover-btn md:!text-lg ">
+          <Link
+            href={`/pricing`}
+            onClick={() => setIsSidebarOpen(false)}
+            className="nav-hover-btn !text-md "
+          >
             Pricing
           </Link>
-          <Link href={`/about`} className="nav-hover-btn md:!text-lg ">
+          <Link
+            href={`/about`}
+            onClick={() => setIsSidebarOpen(false)}
+            className="nav-hover-btn !text-md "
+          >
             About
           </Link>
-          <Link href={`/auth`} className="nav-hover-btn md:!text-lg ">
+          <Link
+            href={`/auth`}
+            onClick={() => setIsSidebarOpen(false)}
+            className="nav-hover-btn !text-md "
+          >
             Login
           </Link>
         </nav>
