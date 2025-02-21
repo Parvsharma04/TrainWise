@@ -2,7 +2,9 @@ const { Server } = require("socket.io");
 const { spawn } = require("child_process");
 
 function initializeSocket(server) {
-  const io = new Server(server);
+  const io = new Server(server, {
+    cors: "https://localhost:3000"
+  });
 
   io.on("connection", (socket) => {
     console.log("New user connected!");
@@ -10,8 +12,10 @@ function initializeSocket(server) {
     let pythonProcess = null;
 
     socket.on("startTracking", () => {
+      console.log("Tracking started...");
+      
       if (!pythonProcess) {
-        pythonProcess = spawn("python", ["../model/squats.py"]);
+        pythonProcess = spawn("python", ["../../model/jumping.py"]);
 
         pythonProcess.stdout.on("data", (data) => {
           try {
@@ -54,6 +58,8 @@ function initializeSocket(server) {
     });
 
     socket.on("videoFrame", (frame) => {
+      console.log(frame);
+      
       if (pythonProcess) {
         const dataToSend = { frame: frame.split("base64,")[1] };
         pythonProcess.stdin.write(JSON.stringify(dataToSend) + "\n");
