@@ -21,24 +21,24 @@ model user {
 }
 
 model user_details {
-  id              String @id @default(uuid())
-  avatar          String
-  time_worked_out Int
-  score           Int
-  streak          Int
-  weight          Int
-  height          Int
-  gender          String
-  age             Int
+  id              String  @id @default(uuid())
+  avatar          String?
+  time_worked_out Int     @default(0)
+  score           Int     @default(0)
+  streak          Int     @default(0)
+  weight          Int     @default(0)
+  height          Int     @default(0)
+  gender          String? @default("Null")
+  age             Int     @default(0)
 
   user user[]
 }
 
 model user_badges {
-  id          String @id @default(uuid())
-  name        String
-  description String
-  image       String
+  id          String  @id @default(uuid())
+  name        String? @default("Null")
+  description String? @default("Null")
+  image       String? @default("Null")
 
   user user[]
 }
