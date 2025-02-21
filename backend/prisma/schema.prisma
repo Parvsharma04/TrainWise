@@ -8,16 +8,14 @@ datasource db {
 }
 
 model user {
-  id       String @id @default(uuid())
-  name     String
-  email    String @unique
-  password String
-
+  id              String        @id @default(uuid())
+  name            String
+  email           String        @unique
+  password        String
+  user_details_id String?       @unique
+  user_badges_id  String?       @unique
+  user_badges     user_badges?  @relation(fields: [user_badges_id], references: [id])
   user_details    user_details? @relation(fields: [user_details_id], references: [id])
-  user_details_id String?       @unique // Ensures one-to-many mapping
-
-  user_badges    user_badges? @relation(fields: [user_badges_id], references: [id])
-  user_badges_id String?      @unique // Ensures one-to-many mapping
 }
 
 model user_details {
@@ -30,8 +28,7 @@ model user_details {
   height          Int     @default(0)
   gender          String? @default("Null")
   age             Int     @default(0)
-
-  user user[]
+  user            user?
 }
 
 model user_badges {
@@ -39,8 +36,7 @@ model user_badges {
   name        String? @default("Null")
   description String? @default("Null")
   image       String? @default("Null")
-
-  user user[]
+  user        user?
 }
 
 model exercises {

@@ -1,9 +1,14 @@
 "use client";
 
 import axios from "axios";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { toast } from "react-toastify";
+import Cookies from "universal-cookie";
 
 export default function Auth() {
+  const cookies = new Cookies();
+  const router = useRouter();
   const [isSignUp, setSignUp] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
@@ -17,21 +22,31 @@ export default function Auth() {
   };
 
   // Handle Form Submission
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Form Data:", formData);
-    if (isSignUp) {
-      axios
-        .post(
+    let response;
+    try {
+      if (isSignUp) {
+        response = await axios.post(
           `${process.env.NEXT_PUBLIC_LOCAL_BACKEND_URL}/user/signup`,
           formData
-        )
-        .then(function (response) {
-          console.log(response);
-        })
-        .catch(function (error) {
-          console.log(error);
-        });
+        );
+      } else {
+        response = await axios.post(
+          `${process.env.NEXT_PUBLIC_LOCAL_BACKEND_URL}/user/login`,
+          {
+            email: formData.email,
+            password: formData.password,
+          }
+        );
+      }
+      toast.success("Login Successful.");
+      if (token) {
+        cookies.set("token", response.data.token);
+        router.push("/");
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 
