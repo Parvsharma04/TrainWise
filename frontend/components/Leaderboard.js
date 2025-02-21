@@ -14,20 +14,20 @@ export default function Leaderboard() {
     return (
         <div className="p-3 m-3 outline outline-1 font-['general'] rounded bg-[#0056F1] text-white">
             <h3 className="text-xl font-['robert-medium'] text-center">Leaderboard</h3>
-            <ul>
-            <li className="flex justify-between mb-2">
-                <div>
-                <span>
-                      Rank
-                </span>
-                <span className="ml-3">Name</span>
-                </div>
-                <span>Score</span>
-        </li>
+            <table className="text-left w-screen p-2">
+            <thead>
+            <tr>
+                <th>Rank</th>
+                <th>Name</th>
+                <th>Score</th>
+            </tr>
+            </thead>
+            <tbody>
                 {players.map(el=>{
                     return <LeaderboardItem key={el.id} rank={el.id} name={el.name} score={el.score} />
                 })}
-            </ul>
+            </tbody>
+            </table>
         </div>
     )
 }

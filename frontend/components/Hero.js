@@ -2,10 +2,8 @@
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/all";
-// import { TiLocationArrow } from "react-icons/ti";
 import { useEffect, useRef, useState } from "react";
 
-import Button from "./Button";
 import VideoPreview from "./VideoPreview";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -131,7 +129,7 @@ const Hero = () => {
           />
         </div>
 
-        <h1 className="special-font hero-heading absolute bottom-5 right-5 z-40 text-blue-75">
+        <h1 className="special-font hero-heading absolute bottom-5 right-5 z-40 text-blue-100">
           G<b>A</b>MIFIED
         </h1>
 
@@ -145,19 +143,12 @@ const Hero = () => {
               Achieve your Fitness Goals <br /> With Gamified Training
             </p>
 
-            {/* Join Us */}
-            {/* <Button
-              id="watch-trailer"
-              title="Join Us"
-              leftIcon={<TiLocationArrow />}
-              containerClass="bg-yellow-300 flex-center gap-1"
-            /> */}
           </div>
         </div>
       </div>
 
       <h1 className="special-font hero-heading absolute bottom-5 right-5 text-black">
-        G<b>A</b>MING
+        G<b>A</b>MIFIED
       </h1>
     </div>
   );

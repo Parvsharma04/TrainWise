@@ -2,22 +2,23 @@
 
 import clsx from "clsx";
 import gsap from "gsap";
-import { useEffect, useRef, useState } from "react";
 import { useWindowScroll } from "react-use";
-// import { TiLocationArrow } from "react-icons/ti";
+import { Fragment, useEffect, useRef, useState } from "react";
+import { FiMenu, FiX } from "react-icons/fi";
 
-const navItems = ["Nexus", "Vault", "Prologue", "About", "Contact"];
+import Link from "next/link";
 
 const NavBar = () => {
   // State for toggling audio and visual indicator
   const [isAudioPlaying, setIsAudioPlaying] = useState(false);
   const [isIndicatorActive, setIsIndicatorActive] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   // Refs for audio and navigation container
   const audioElementRef = useRef(null);
   const navContainerRef = useRef(null);
 
-  const { y: currentScrollY } = useWindowScroll();
+  const { y: currentScrollY } = useWindowScroll() || { y: 0 };
   const [isNavVisible, setIsNavVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
 
@@ -71,29 +72,32 @@ const NavBar = () => {
         <nav className="flex size-full items-center justify-between p-4">
           {/* Logo and Product button */}
           <div className="flex items-center gap-7">
-            <img src="logo.png" alt="logo" className="w-10" />
-
-            {/* <Button
-              id="product-button"
-              title="Products"
-              rightIcon={<TiLocationArrow />}
-              containerClass="bg-blue-50 md:flex hidden items-center justify-center gap-1"
-            /> */}
+            <img src="/img/logo.png" alt="logo" className="w-10" />
           </div>
 
           {/* Navigation Links and Audio Button */}
           <div className="flex h-full items-center">
             <div className="hidden md:block">
-              {navItems.map((item, index) => (
-                <a
-                  key={index}
-                  href={`#${item.toLowerCase()}`}
-                  className="nav-hover-btn"
-                >
-                  {item}
-                </a>
-              ))}
+              <Link href={`/`} className="nav-hover-btn md:!text-lg ">
+                Home
+              </Link>
+              <Link href={`/pricing`} className="nav-hover-btn md:!text-lg ">
+                Pricing
+              </Link>
+              <Link href={`/about`} className="nav-hover-btn md:!text-lg ">
+                About
+              </Link>
+              <Link href={`/auth`} className="nav-hover-btn md:!text-lg ">
+                Login
+              </Link>
             </div>
+
+            <button
+              className="ml-4 md:hidden"
+              onClick={() => setIsSidebarOpen(true)}
+            >
+              <FiMenu size={24} />
+            </button>
 
             <button
               onClick={toggleAudioIndicator}
@@ -105,21 +109,65 @@ const NavBar = () => {
                 src="/audio/loop.mp3"
                 loop
               />
-              {[1, 2, 3, 4].map((bar) => (
+              {/* {[1, 2, 3, 4].map((bar) => (
                 <div
                   key={bar}
-                  className={clsx("indicator-line", {
+                  className={clsx("indicator-line !w-3 !h-5 !mr-5", {
                     active: isIndicatorActive,
                   })}
                   style={{
                     animationDelay: `${bar * 0.1}s`,
                   }}
                 />
-              ))}
+              ))} */}
             </button>
           </div>
         </nav>
       </header>
+
+      <div
+        className={clsx(
+          "fixed -top-5 inset-y-0 left-0 z-50 w-64 bg-white shadow-lg transform transition-transform duration-300 md:hidden",
+          isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+        )}
+      >
+        <div className="p-4 flex justify-between items-center border-b">
+          <h2 className="text-lg font-semibold">Menu</h2>
+          <button onClick={() => setIsSidebarOpen(false)}>
+            <FiX size={24} />
+          </button>
+        </div>
+        <nav className="flex flex-col p-4 space-y-4 bg-gray-700 h-screen">
+          <Link
+            href={`/`}
+            onClick={() => setIsSidebarOpen(false)}
+            className="nav-hover-btn md:!text-md "
+          >
+            Home
+          </Link>
+          <Link
+            href={`/pricing`}
+            onClick={() => setIsSidebarOpen(false)}
+            className="nav-hover-btn !text-md "
+          >
+            Pricing
+          </Link>
+          <Link
+            href={`/about`}
+            onClick={() => setIsSidebarOpen(false)}
+            className="nav-hover-btn !text-md "
+          >
+            About
+          </Link>
+          <Link
+            href={`/auth`}
+            onClick={() => setIsSidebarOpen(false)}
+            className="nav-hover-btn !text-md "
+          >
+            Login
+          </Link>
+        </nav>
+      </div>
     </div>
   );
 };
