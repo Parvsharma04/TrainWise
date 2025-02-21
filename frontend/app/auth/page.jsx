@@ -45,7 +45,7 @@ export default function Auth() {
       if (response.data.token) {
         cookies.set("token", response.data.token);
         setTimeout(() => {
-          router.push("/");
+          router.push("/dashboard");
         }, 3000);
       }
     } catch (error) {
@@ -54,11 +54,11 @@ export default function Auth() {
   };
 
   return (
-    <section className="bg-gray-50">
+    <section className="bg-gray-700">
       <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
         <a
           href="#"
-          className="flex items-center mb-6 text-2xl font-semibold text-gray-900"
+          className="flex items-center mb-6 text-2xl font-semibold text-white"
         >
           <img className="w-8 h-8 mr-2" src="logo.png" alt="logo" />
           TrainWise
