@@ -157,10 +157,10 @@ const Features = () => (
             src="videos/feature-4.mp4"
             title={
               <>
-                ai t<b>u</b>torials
+                Exercise Co<b>u</b>nter
               </>
             }
-            description="Get AI-powered tutorials tailored to your fitness level and goals!"
+            description="We count your exercise with the help of AI so you can focus on your goals."
             isComingSoon
           />
         </BentoTilt>
