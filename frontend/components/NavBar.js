@@ -8,8 +8,7 @@ import { useWindowScroll } from "react-use";
 import Cookies from "universal-cookie";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 const NavBar = () => {
   // State for toggling audio and visual indicator
@@ -90,7 +89,7 @@ const NavBar = () => {
         <nav className="flex size-full items-center justify-between p-4">
           {/* Logo and Product button */}
           <div className="flex items-center gap-7">
-            <img src="/img/logo.png" alt="logo" className="w-10" />
+            <img src="/logo.png" alt="logo" className="w-10" />
           </div>
 
           {/* Navigation Links and Audio Button */}
@@ -104,7 +103,7 @@ const NavBar = () => {
               >
                 Home
               </Link>
-              {isAuth && (
+              {/* {isAuth && (
                 <Link
                   href={`/activity`}
                   className={`nav-hover-btn md:!text-lg ${
@@ -112,6 +111,16 @@ const NavBar = () => {
                   }`}
                 >
                   Activity
+                </Link>
+              )} */}
+              {isAuth && (
+                <Link
+                  href={`/excercises`}
+                  className={`nav-hover-btn md:!text-lg ${
+                    !whiteLinks.find((e) => e == pathname) ? "!text-black" : ""
+                  }`}
+                >
+                  Exercises
                 </Link>
               )}
               {isAuth && (

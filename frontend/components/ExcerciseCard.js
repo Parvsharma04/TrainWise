@@ -10,6 +10,8 @@ import Image from "next/image";
 import Link from "next/link";
 
 export default function ExerciseCard({ exercise }) {
+  console.log(exercise);
+  let link = exercise.name.toLowerCase();
   return (
     <Card className="flex flex-col h-full">
       <CardHeader>
@@ -17,7 +19,7 @@ export default function ExerciseCard({ exercise }) {
       </CardHeader>
       <CardContent className="flex-grow">
         <Image
-          src={exercise.imageUrl || "/placeholder.svg"}
+          src={exercise.image_url}
           alt={exercise.name}
           width={300}
           height={200}
@@ -28,7 +30,7 @@ export default function ExerciseCard({ exercise }) {
       </CardContent>
       <CardFooter className="flex justify-between items-center">
         <p className="text-sm text-gray-500">Attempts: {exercise.attempts}</p>
-        <Link href={`/activity/${exercise.id}`}>
+        <Link href={`/activity/${link}`}>
           <Button>Start Exercising</Button>
         </Link>
       </CardFooter>

@@ -24,7 +24,7 @@ export default function Home() {
   if (!data) return <p>Loading...</p>;
 
   return (
-    <main className="container mx-auto px-4 py-8">
+    <main className="px-4 mt-28">
       <h1 className="text-3xl font-bold mb-6">Exercise List</h1>
       <ExerciseList exercises={data} />
     </main>

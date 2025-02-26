@@ -1,10 +1,10 @@
 "use client";
 
 import { Geist, Geist_Mono } from "next/font/google";
-import { ToastContainer } from "react-toastify";
-import "./globals.css";
-import NavBar from "../components/NavBar";
 import { usePathname } from "next/navigation";
+import { ToastContainer } from "react-toastify";
+import NavBar from "../components/NavBar";
+import "./globals.css";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -40,7 +40,9 @@ export default function RootLayout({ children }) {
           pauseOnHover
           theme="light"
         />
-        {pathname != "/activity" && <NavBar />}
+        {pathname != "/activity/squats" && pathname != "/activity/pushups" && (
+          <NavBar />
+        )}
         {children}
       </body>
     </html>
